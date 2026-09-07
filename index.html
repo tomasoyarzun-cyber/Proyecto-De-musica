@@ -1,19 +1,83 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <title> Musica </title>
-    </head>
-    <body>
-        <h1> Conchetumusic</h1>
-        <p> Ama la musica</p>
-        <p> Primero tienes que autenticarte</p>
+
+<head>
+
+    <title>Musica</title>
+
+</head>
+
+<body>
+
+    
+    <div id="Login">
+
+        <h1>Tumusic</h1>
+
+        <p>Ama la musica</p>
+        <p>Primero tienes que autenticarte</p>
+
+        <form>
+
+            <label for="nombre">Nombre de usuario</label>
+
+            <input id="nombre" type="text" name="nombre" required>
+
+            <button type="submit">Iniciar Sesion</button>
+
+        </form>
+
+    </div>
+
+
+    
+    <div id="inicio">
+
+        <h1>Musica a todo volumen</h1>
+        <div id= "Buscador">
+            <p>Buscar Canción :</p>
+
+            <input type="text" id="cancion" >
+
+            <button type="submit">Buscar</button>
+
+        </div>
+        <div id="reproductor">
+            <audio id="play" controls src=""></audio>
+        </div>
+
+        <div id="Lista">
+            <h2> Lista de canciones escuchadas:</h2>
+
+            <p> Artista: </p>
+
+            <p> Genero: </p>
+
+
+        </div>
+
+        <div id="Playlist">
+            <h2> Playlist: </h2>
+        </div>
+
+        <div id="Historial">
+            <h2> Historial de canciones</h2>
+        </div>
+
+    
+
+
+
+
+
+
         
-    </body>
-    <form>
-        <label for="nombre">Nombre de usuario</label>
-        <input id="nombre" type="name"
-        name="nombre" required>
-        </input>
-        <button type="submit" >Iniciar Sesion</button>
-    </form>
+
+        
+
+
+    </div>
+
+</body>
+
 </html>

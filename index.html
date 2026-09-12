@@ -27,38 +27,44 @@
 
     </main>
     <main id="inicio">
+        <header>
 
         <h1>Musica a todo volumen</h1>
-        <div id= "Buscador">
-            <p>Buscar Canción :</p>
+        <form id= "Buscador">
+            <label for="cancion">Buscar canción:</label>
 
-            <input type="text" id="cancion" >
+            <input type="text" id="cancion" name="cancion">
 
             <button type="submit">Buscar</button>
+        </form>
+    </header>
 
-        </div>
+        
         <div id="reproductor">
             <audio id="play" controls src=""></audio>
         </div>
 
-        <div id="Lista">
+        <section id="Lista">
             <h2> Lista de canciones escuchadas:</h2>
+            <article>
+                   <p> Nombre De la Canción: </p>
+                   <p> Artista: </p>
+                   <p> Genero: </p>
+            </article>
+            </section>
 
-            <p> Nombre De la Canción: </p>
 
-            <p> Artista: </p>
-
-            <p> Genero: </p>
-
-
-        </div>
-
-        <div id="Playlist">
+        
+<!-- Oyarzun hermano la playlist y el historial los voy a poner como aside pa q se vea como en el spotify-->
+       <aside>
+        <section id="Playlist">
             <h2> Playlist: </h2>
-        </div>
+        </section>
 
-        <div id="Historial">
+        <section id="Historial">
             <h2> Historial de canciones: </h2>
+            </section>
+            </aside>
         </main>
 
     
@@ -73,7 +79,7 @@
         
 
 
-    </div>
+    
     
 
 

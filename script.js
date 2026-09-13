@@ -11,7 +11,7 @@ formulario.addEventListener("submit", function(event) {
 
 const buscador = document.getElementById("buscador");
 const cancionInput = document.getElementById("cancion");
-const informacion = document.getElementById("informacion");
+const informacion = document.getElementById("lista");
 const play = document.getElementById("play");
 
 buscador.addEventListener("submit", function(event) {

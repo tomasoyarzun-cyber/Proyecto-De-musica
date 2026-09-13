@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <title>Musica</title>
     <link rel="stylesheet" href="style.css">
+
     <style>
         #inicio {
             display: none;   
         }
     </style>
-</head>
+    
+    </head>
 
 <body>
 
@@ -30,16 +32,19 @@
     
     <section id="inicio">
         <header>
-            <h1>Musica a todo volumen</h1>
-            <form id="buscador">
-                <label for="cancion">Buscar canción:</label>
-                <input type="text" id="cancion" name="cancion">
-                <button type="submit">Buscar</button>
-            </form>
-        </header>
 
-        <section id="informacion">
-            <h2>Información de la canción:</h2>
+        <h1>Musica a todo volumen</h1>
+        <form id= "buscador">
+            <label for="cancion">Buscar canción:</label>
+
+            <input type="text" id="cancion" name="cancion">
+
+            <button type="submit">Buscar</button>
+        </form>
+    </header>
+
+        <section id="lista">
+            <h2> Lista de canciones escuchadas:</h2>
             <article>
                 <p>Nombre De la Canción: </p>
                 <p>Artista: </p>
@@ -56,6 +61,52 @@
             <section id="playlist">
                 <h2>Playlist:</h2>
             </section>
+            </aside>
+            
+            <footer id="reproductor">
+            <audio id="play" controls src=""></audio>
+            </footer>
+        </main>
+
+
+    <script src="script.js"></script>
+    </body>
+    </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
 
             <section id="historial">
                 <h2>Historial de canciones: </h2>

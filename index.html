@@ -4,6 +4,14 @@
 <head>
 <meta charset="UTF-8">
     <title>Musica</title>
+
+    <style>
+        #inicio {
+          display: none;   
+       }
+
+    </style>
+    
     
     
     
@@ -13,7 +21,7 @@
 <body>
 
     
-    <main id="Login">
+    <main id="login">
         <h1>Tumusic</h1>
         <p>Ama la musica</p>
         <p>Primero tienes que autenticarte</p>
@@ -30,7 +38,7 @@
         <header>
 
         <h1>Musica a todo volumen</h1>
-        <form id= "Buscador">
+        <form id= "buscador">
             <label for="cancion">Buscar canción:</label>
 
             <input type="text" id="cancion" name="cancion">
@@ -44,12 +52,13 @@
             <audio id="play" controls src=""></audio>
         </div>
 
-        <section id="Lista">
+        <section id="lista">
             <h2> Lista de canciones escuchadas:</h2>
             <article>
                    <p> Nombre De la Canción: </p>
                    <p> Artista: </p>
                    <p> Genero: </p>
+                   <p> Año de Lanzamiento: </p>
             </article>
             </section>
 
@@ -57,15 +66,46 @@
         
 <!-- Oyarzun hermano la playlist y el historial los voy a poner como aside pa q se vea como en el spotify-->
        <aside>
-        <section id="Playlist">
+        <section id="playlist">
             <h2> Playlist: </h2>
         </section>
 
-        <section id="Historial">
+        <section id="historial">
             <h2> Historial de canciones: </h2>
             </section>
             </aside>
         </main>
+
+
+    <script src="script.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
 

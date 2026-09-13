@@ -2,131 +2,72 @@
 <html lang="es">
 
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <title>Musica</title>
-
     <style>
         #inicio {
-          display: none;   
-       }
-
+            display: none;   
+        }
     </style>
-    
-    
-    
-    
-
 </head>
 
 <body>
 
     
-    <main id="login">
+    <section id="login">
         <h1>Tumusic</h1>
         <p>Ama la musica</p>
         <p>Primero tienes que autenticarte</p>
 
         <form id="formulario">
-             <label for="nombre">Nombre de usuario</label>
-             <input id="nombre" type="text" name="nombre" required>
-             <button type="submit">Iniciar Sesion</button>
-
+            <label for="nombre">Nombre de usuario</label>
+            <input id="nombre" type="text" name="nombre" required>
+            <button type="submit">Iniciar Sesión</button>
         </form>
+    </section>
 
-    </main>
-    <main id="inicio">
+    
+    <section id="inicio">
         <header>
+            <h1>Musica a todo volumen</h1>
+            <form id="buscador">
+                <label for="cancion">Buscar canción:</label>
+                <input type="text" id="cancion" name="cancion">
+                <button type="submit">Buscar</button>
+            </form>
+        </header>
 
-        <h1>Musica a todo volumen</h1>
-        <form id= "buscador">
-            <label for="cancion">Buscar canción:</label>
-
-            <input type="text" id="cancion" name="cancion">
-
-            <button type="submit">Buscar</button>
-        </form>
-    </header>
-
-        
-        <div id="reproductor">
-            <audio id="play" controls src=""></audio>
-        </div>
-
-        <section id="lista">
-            <h2> Lista de canciones escuchadas:</h2>
+        <section id="informacion">
+            <h2>Información de la canción:</h2>
             <article>
-                   <p> Nombre De la Canción: </p>
-                   <p> Artista: </p>
-                   <p> Genero: </p>
-                   <p> Año de Lanzamiento: </p>
+                <p>Nombre De la Canción: </p>
+                <p>Artista: </p>
+                <p>Genero: </p>
+                <p>Año de Lanzamiento: </p>
             </article>
-            </section>
-
-
-        
-<!-- Oyarzun hermano la playlist y el historial los voy a poner como aside pa q se vea como en el spotify-->
-       <aside>
-        <section id="playlist">
-            <h2> Playlist: </h2>
         </section>
 
-        <section id="historial">
-            <h2> Historial de canciones: </h2>
+        
+        <aside>
+            <section id="lista">
+                <h2>Lista de Reproducción: </h2>
             </section>
-            </aside>
-        </main>
+            <section id="playlist">
+                <h2>Playlist:</h2>
+            </section>
 
+            <section id="historial">
+                <h2>Historial de canciones: </h2>
+            </section>
+        </aside>
+
+        
+        <footer id="reproductor">
+            <audio id="play" controls src=""></audio>
+        </footer>
+    </section>
 
     <script src="script.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-        
-
-        
-
-
-    
-    
-
-
-
-    
-    
-
 </body>
 
 </html>

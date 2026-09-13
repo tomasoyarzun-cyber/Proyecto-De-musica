@@ -7,7 +7,7 @@ formulario.addEventListener("submit", function(event) {
     event.preventDefault();
 
     login.style.display = "none";
-    inicio.style.display = "block";
+    inicio.style.display = "grid";
 
 });
 

@@ -12,7 +12,7 @@
 ## 3. Acceso al proyecto y despliegue (IP pública)
 El proyecto se encuentra en la nube de AWS utilizando una instancia EC2 con el servidor web nginx.
 IP pública de la aplicación:
-**http://54.90.102.230/**.
+**http://34.229.177.154/**.
 
 ## 4. Rutas y vistas implementadas
 * **Ruta principal (/)**: 

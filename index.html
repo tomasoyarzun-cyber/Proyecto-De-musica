@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Musica</title>
     <link rel="stylesheet" href="style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alhpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
         #inicio {
@@ -62,10 +63,34 @@
                 <h2>Playlist:</h2>
             </section>
             </aside>
-            <footer id="reproductor">
-            <audio id="play" controls src=""></audio>
+            
+            <footer id="reproductor" x-data="{reproduciendo:false}">
+            <audio id="play" x-ref="audio" src="cancion/1.mp3"></audio>
+
+            <!--Usare emojis para los simbolos de prueba de el reproductor
+            Despues buscamos en alguna pagina algunos iconos gratis o algo asi-->
+            
+            <div class="controles-principales">
+                <div class="botones-musica">
+                    <button class="boton-uso" aria-label="Aleatorio">🔀</button>
+                    <button class="boton-uso" aria-label="Anterior">⏮</button>
+                    <button class="boton-uso boton-reproducir-pausar"
+                    aria-label="Reproducir/Pausar" 
+                    @click="reproduciendo= !reproduciendo; reproduciendo ? $refs.audio.play(): $refs.audio.pause()">
+                    <span x-text="reproduciendo ? '⏸' : '▶'"></span>
+                    </button>
+                    <button class="boton-uso" aria-label="Siguiente">⏭</button>
+                    <button class="boton-uso" aria-label="Repetir">🔁</button>
+                    </div>
+
+                    <div class="progreso">
+                        <span class="marca-tiempo tiempo-actual">0:01</span>
+                        <input type="rango" class="barra" min="0" max="100" value="1" aria-label=""Progreso de la canción">
+                        <span class="marca-tiempo tiempo-total">3:08</span>
+                    </div>
+                </div>
             </footer>
-        </main>
+       
 
 
     <script src="script.js"></script>

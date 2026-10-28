@@ -31,7 +31,7 @@
     </section>
 
     
-    <section id="inicio" x-data="cancionController(new CancionServicio(new LocalStorageCancionRepository()))">
+    <section id="inicio" x-data="cancionData">
         <header>
             <h1>Musica a todo volumen</h1>
             <form id="buscador" @submit.prevent="buscar()">
@@ -95,7 +95,7 @@
     <script src="js/repositorios/localstoragecancionrepository.js"></script>
     <script src="js/servicios/cancionservicio.js"></script>
     <script src="js/controladores/cancioncontroller.js"></script>
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>

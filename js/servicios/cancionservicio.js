@@ -1,8 +1,9 @@
-class CancionServicio{
-    constructor(repositorio){
-        this.repositorio = repositorio; 
+class CancionServicio {
+    constructor(repositorio) {
+        this.repositorio = repositorio;
     }
-    async obtenerCanciones(){
+
+    async obtenerCanciones() {
         return await this.repositorio.listar();
     }
 }

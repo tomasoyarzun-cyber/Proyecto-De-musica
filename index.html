@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Musica</title>
     <link rel="stylesheet" href="style.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/alhpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
         #inicio {
@@ -31,27 +31,26 @@
     </section>
 
     
-    <section id="inicio">
+    <section id="inicio" x-data="cancionController(new CancionServicio(new LocalStorageCancionRepository()))">
         <header>
+            <h1>Musica a todo volumen</h1>
+            <form id="buscador" @submit.prevent="buscar()">
+                <label for="cancion">Buscar canción:</label>
+                <input type="text" id="cancion" name="cancion" x-model="criterio" @input="buscar()" placeholder="Título, artista, id o año...">
+                <button type="submit">Buscar</button>
+               </form>
+             </header>
 
-        <h1>Musica a todo volumen</h1>
-        <form id= "buscador">
-            <label for="cancion">Buscar canción:</label>
-
-            <input type="text" id="cancion" name="cancion">
-
-            <button type="submit">Buscar</button>
-        </form>
-    </header>
-
-        <section id="lista">
-            <h2> Lista de canciones escuchadas:</h2>
-            <article>
-                <p>Nombre De la Canción: </p>
-                <p>Artista: </p>
-                <p>Genero: </p>
-                <p>Año de Lanzamiento: </p>
-            </article>
+    <section id="lista" x-show="cancionesFiltradas.length > 0">
+            <h2>Información de la canción:</h2>
+            <template x-for="item in cancionesFiltradas" :key="item.id">
+             <article @click="reproducir(item)" style="cursor: pointer; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+            <p>Nombre De la Canción: <strong x-text="item.titulo"></strong></p>
+            <p>Artista: <span x-text="item.artista"></span></p>
+            <p>Genero: <span x-text="item.genero"></span></p>
+            <p>Año de Lanzamiento: <span x-text="item.anio"></span></p>
+           </article>
+            </template>
         </section>
 
         
@@ -64,9 +63,8 @@
             </section>
             </aside>
             
-            <footer id="reproductor" x-data="{reproduciendo:false}">
-            <audio id="play" x-ref="audio" src="cancion/1.mp3"></audio>
-
+            <footer id="reproductor" x-data="{ reproduciendo: false }">
+            <audio id="play" x-ref="audio" :src="cancionActual ? cancionActual.src : ''"></audio>
             <!--Usare emojis para los simbolos de prueba de el reproductor
             Despues buscamos en alguna pagina algunos iconos gratis o algo asi-->
             
@@ -93,12 +91,11 @@
        
 
 
+    <script src="js/repositorios/cancionrepository.js"></script>
+    <script src="js/repositorios/localstoragecancionrepository.js"></script>
+    <script src="js/servicios/cancionservicio.js"></script>
+    <script src="js/controladores/cancioncontroller.js"></script>
     <script src="script.js"></script>
-    </body>
-        <section id="historial">
-                <h2>Historial de canciones: </h2>
-            </section>
-        </aside>
 </body>
 
 </html>

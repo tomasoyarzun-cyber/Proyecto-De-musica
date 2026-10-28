@@ -1,14 +1,14 @@
-export class cancionrepository {
-  async listar() { 
-    throw new Error('No implementado'); 
-  }
-  async crear(cancion) { 
-    throw new Error('No implementado'); 
-  }
-  async editar(cancion) { 
-    throw new Error('No implementado'); 
-  }
-  async eliminar(id) { 
-    throw new Error('No implementado'); 
-  }
+class CancionRepository {
+    async listar() { 
+        throw new Error('Método no implementado'); 
+    }
+    async crear(cancion) { 
+        throw new Error('Método no implementado'); 
+    }
+    async editar(cancion) { 
+        throw new Error('Método no implementado'); 
+    }
+    async eliminar(id) { 
+        throw new Error('Método no implementado'); 
+    }
 }

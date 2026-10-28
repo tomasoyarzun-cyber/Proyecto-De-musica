@@ -18,18 +18,6 @@
 <body>
 
     
-    <section id="login">
-        <h1>Studiopolis</h1>
-        <p>Ama la musica</p>
-        <p>Primero tienes que autenticarte</p>
-
-        <form id="formulario">
-            <label for="nombre">Nombre de usuario</label>
-            <input id="nombre" type="text" name="nombre" required>
-            <button type="submit">Iniciar Sesión</button>
-        </form>
-    </section>
-
     
     <section id="inicio" x-data="cancionData">
         <header>
@@ -55,13 +43,11 @@
 
         
         <aside>
-            <section id="favorito">
-                <h2>Canciones Favoritas: </h2>
-            </section>
-            <section id="playlist">
-                <h2>Playlist:</h2>
-            </section>
-            </aside>
+    <a href="favoritos.html">Canciones Favoritas</a>
+    <a href="playlists.html">Mis Playlists</a>
+    <a href="historial.html">Historial</a>
+    <a href="estadisticas.html">Estadísticas</a>
+</aside>
             
             <footer id="reproductor" x-data="{ reproduciendo: false }">
             <audio id="play" x-ref="audio" :src="cancionActual ? cancionActual.src : ''"></audio>

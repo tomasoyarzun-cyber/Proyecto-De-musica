@@ -43,12 +43,6 @@ function cancionController(servicio) {
 
         reproducir(cancion) {
             this.cancionActual = cancion;
-            this.$nextTick(() => {
-                const audio = document.getElementById("play");
-                if (audio) {
-                    audio.play();
-                }
-            });
         }
     };
 }

@@ -1,3 +1,6 @@
-const repo= new localstoragecancionrepository();
-const service = new cancion(repo);
-const ctrl= new cancioncontroller(service)
+document.addEventListener('alpine:init', () => {
+    const repo = new LocalStorageCancionRepository();
+    const service = new CancionServicio(repo);
+
+    Alpine.data('cancionData', () => cancionController(service));
+});

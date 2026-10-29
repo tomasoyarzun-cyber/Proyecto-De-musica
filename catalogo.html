@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang=""es">
+<html lang="es">
 
 <head>
-    <meta charset="!UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo-Studiopolis</title>
     <link rel="stylesheet" href="style.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/alphinejs@2.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@2.x.x/dist/cdn.min.js"></script>
     </head>
 
     <body>
-        <div id="Almacenamiento.principal" x.data="{
+        <div id="Almacenamiento.principal" x-data='{
             busqueda: "",
             reproduciendo: false,
-            cancionActual: "Let's Groove - Earth, Wind & Fire",
+            cancionActual: "Lets Groove - Earth, Wind & Fire",
             canciones: [
-            { id: 1, titulo: "Let's Groove", artista: "Earth, Wind & Fire", genero: "Funk/Disco", anio: 1981, archivo: "cancion/1.mp3", favorito:false},
-            { id: 2, titulo: "Lights, Camera, Action", artist: "Tee Lopes", genero: "Jazz/Big Band", anio: 2017, archivo: "cancion/2.mp3", favorito:true}
-            { id: 3, titulo: "Teknopathetic", artist: "Hideki Naganuma", genero"Electro/Funk", anio: 2017, archivo:"cancion/3.mp3", favorito:true}
+            { id: 1, titulo: "Lets Groove", artista: "Earth, Wind & Fire", genero: "Funk/Disco", anio: 1981, archivo: "cancion/1.mp3", favorito:false},
+            { id: 2, titulo: "Lights, Camera, Action", artista: "Tee Lopes", genero: "Jazz/Big Band", anio: 2017, archivo: "cancion/2.mp3", favorito:true},
+            { id: 3, titulo: "Teknopathetic", artista: "Hideki Naganuma", genero"Electro/Funk", anio: 2017, archivo:"cancion/3.mp3", favorito:true}
             ],
             seleccionarCancion(cancion){
                 this.cancionActual= cancion.titulo + "-" + cancion.artista;
@@ -25,7 +25,7 @@
                 this.$refs.audio.play();
                 this.reproduciendo = true;
             }
-        }">
+        }'>
 
         <header>
             <h1>Catálogo-Studiopolis</h1>
@@ -56,7 +56,7 @@
             <h2>Explorar Canciones y Artistas</h2>
 
             <div class="conjunto-catalogo">
-                <template x-for="cancion in canciones.filter(pista => pista.titulo.toLowerCase().includes(busqueda.toLowerCase()) || pista.artista.toLowerCase().includes(busqueda.toLowerCase()) || pista.genero.toLowerCase().includes(busqueda.toLowerCase()))" :key="cancion.numero">
+                <template x-for="cancion in canciones.filter(pista => pista.titulo.toLowerCase().includes(busqueda.toLowerCase()) || pista.artista.toLowerCase().includes(busqueda.toLowerCase()) || pista.genero.toLowerCase().includes(busqueda.toLowerCase()))" :key="cancion.id">
                     <article class="ficha-cancion">
                         <h3 x-text="cancion.titulo"></h3>
                         <p><strong>Artista:</strong> <span x-text="cancion.artista"></span></p>
@@ -67,7 +67,7 @@
                             <button type="button" class="boton-escuchar" @click="seleccionarCancion(cancion)">
                                 Escuchar
                             </button>
-                            <button type="button" class="boton-escuchar" @click="cancion.favorito" = !cancion.favorito" aria-label="Marcar como favorito">
+                            <button type="button" class="boton-escuchar" @click="cancion.favorito = !cancion.favorito" aria-label="Marcar como favorito">
                               <span x-text="cancion.favorito ? 'En favoritos' : 'Agregar a favoritos'"></span>  
                             </button>
                         </div>                         
@@ -79,7 +79,7 @@
         <footer id="reproductor">
             <audio id="audio-reproductor" x-ref="audio" src="cancion/1.mp3"></audio>
             <div class="controles">
-                <p class="cancion.activa" x-text=" 'Sonando: ' + cancionActual"></p>
+                <p class="cancion-activa" x-text=" 'Sonando: ' + cancionActual"></p>
 
                 <div class="botonera-musica">
                     <button class="boton-accion" aria-label="Aleatorio">Aleatorio</button>
@@ -87,7 +87,7 @@
 
                     <button class="boton-accion boton-reproducir-pausar"
                     aria-label="Reproducir o Pausar"
-                    @click="reproduciendo = !reproduciendo; reproducion ? $refs.audioplay() : $refs.audio.pause() ">
+                    @click="reproduciendo = !reproduciendo; reproduciendo ? $refs.audio.play() : $refs.audio.pause() ">
                 <span x-text="reproduciendo ? 'Pausar' : 'Reproducir'"></span>
                 </button>
 

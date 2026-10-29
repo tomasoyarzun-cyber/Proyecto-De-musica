@@ -1,6 +1,13 @@
+@theme{
+--color-marca: #9d72ff;
+--color-fondo: #181818; 
+--color-panel: #000000;
+--color-tarjeta: #242424;
+}
+
 body{
     margin: 0;
-    background-color: #181818;
+    background-color: var(--color-fondo);
     color: white;
     font-family: Arial, sans-serif;
 }
@@ -17,7 +24,7 @@ header{
 }
 
 aside{
-    background-color: #000000;
+    background-color: var(--color-panel);
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
@@ -39,15 +46,97 @@ aside a{
 }
 
 #reproductor{
-    background-color: #000000;
+    background-color: var(--color-panel);
     padding: 15px;
-    border-top: 2px solid #23027c;
+    border-top: 2px solid var(--color-marca);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
     position: sticky;
     bottom: 0;
+}
+
+@utility menu-navegacion{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+@utility conjunto-catalogo{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+    gap:20px;
+    margin-top:20px;
+}
+@utility ficha-cancion{
+    background-color: var(--color-tarjeta);
+    padding:15px;
+    border-radius:8px;
+    transition: background-color 0.3s ease;
+}
+.ficha-cancion:hover{
+    background-color: #333333;
+}
+.ficha-cancion h3{
+    margin-top:0;
+    margin-bottom:10px;
+    color: var(--color-marca);
+}
+@utility acciones-ficha{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+@utility boton-escuchar{
+    background-color: var(--color-marca);
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:20px;
+    cursor: pointer;
+    font-weight: bold;
+    flex-grow:1;
+}
+@utility controles{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+@utility botonera-musica{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+@utility boton-accion{
+    background: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+@utility boton-reproducir-pausar{
+    background-color: white;
+    color: black;
+    border-radius: 50%;
+    padding:10px 15px;
+    font-weight: bold;
+}
+@utility progreso{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+}
+@utility barra-deslizante{
+    flex-grow: 1;
+    cursor: pointer;
 }
 
 @media (min-width: 768px){
@@ -92,5 +181,14 @@ aside a{
         grid-row: 3;
         flex-direction: row;
         position: static;
+    }
+
+    #reproductor .controles{
+        flex-direction:row;
+        justify-content: space-between;
+    }
+
+    #reproductor .progreso{
+        max-width: 300px;
     }
 }

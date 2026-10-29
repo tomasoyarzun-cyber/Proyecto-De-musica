@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Playlists - TuMusic</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+    <div id="inicio">
+       <aside>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catalogo</a></li>
+            <li><a href="playlists.html">Mis Playlists</a></li>
+            <li><a href="favoritos.html">Favoritos</a></li>
+            <li><a href="historial.html">Historial</a></li>
+            <li><a href="estadisticas.html">Estadisticas</a></li>
+        </ul>
+    </nav>
+</aside>
+        <header>
+            <h1>Gestión de Playlists</h1>
+        </header>
+
+        <section id="lista" x-data="playlistData">
+            <h2>Crear nueva playlist</h2>
+            <input type="text" x-model="nuevaPlaylist" placeholder="Nombre de la playlist">
+            <button @click="guardar()">Guardar</button>
+
+            <h2 style="margin-top: 20px;">Tus Playlists</h2>
+            <ul>
+                <template x-for="p in playlists" :key="p.id">
+                    <li style="margin-bottom: 10px;">
+                        <span x-show="editandoId !== p.id" x-text="p.nombre" style="margin-right: 10px;"></span>
+                        <button x-show="editandoId !== p.id" @click="iniciarEdicion(p)">Editar</button>
+                        
+                        <span x-show="editandoId === p.id">
+                            <input type="text" x-model="nombreEdicion">
+                            <button @click="guardarEdicion()">Confirmar</button>
+                        </span>
+                        
+                        <button @click="eliminar(p.id)">Eliminar</button>
+                    </li>
+                </template>
+            </ul>
+        </section>
+    </div>
+
+    <script src="js/repositorios/playlistrepository.js"></script>
+    <script src="js/repositorios/localstorageplaylistrepository.js"></script>
+    <script src="js/servicios/playlistservicio.js"></script>
+    <script src="js/controladores/playlistcontroller.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>TuMusic</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#9d72ff">
 </head>
 <body>
     <div id="inicio">
@@ -29,5 +31,14 @@
             <p>La interfaz está lista, funcionalidades próximamente.</p>
         </section>
     </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('Service Worker registrado correctamente:', reg.scope))
+                    .catch(err => console.error('Error al registrar Service Worker:', err));
+            });
+        }
+    </script>
 </body>
 </html>

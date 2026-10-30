@@ -1,4 +1,4 @@
-# TuMusic - Plataforma web de música
+# Studiopolis - Plataforma web de música
 
 ## 1. Descripción del proyecto
 * Es una plataforma web con interfaz estática que funciona como un reproductor de música.
@@ -11,8 +11,8 @@
 
 ## 3. Acceso al proyecto y despliegue (IP pública)
 El proyecto se encuentra en la nube de AWS utilizando una instancia EC2 con el servidor web nginx.
-IP pública de la aplicación:
-**http://34.229.177.154/**.
+IP pública (Elástica) de la aplicación:
+**http://44.221.209.252/**.
 
 ## 4. Rutas y vistas implementadas
 * **Ruta principal (/)**: 

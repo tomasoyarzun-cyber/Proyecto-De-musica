@@ -3,78 +3,94 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Musica</title>
+    <title>Studiopolis</title>
     <link rel="stylesheet" href="style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#9d72ff">
 
-    <style>
-        #inicio {
-            display: none;   
-        }
-    </style>
-    
     </head>
 
-<body>
-
+<body class="bg-[#181818] text-white">
     
-    <section id="login">
-        <h1>Tumusic</h1>
-        <p>Ama la musica</p>
-        <p>Primero tienes que autenticarte</p>
-
-        <form id="formulario">
-            <label for="nombre">Nombre de usuario</label>
-            <input id="nombre" type="text" name="nombre" required>
-            <button type="submit">Iniciar Sesión</button>
-        </form>
-    </section>
-
     
-    <section id="inicio">
+    <section id="inicio" x-data="cancionData">
         <header>
+            <h1>Musica a todo volumen</h1>
+            <form id="buscador" @submit.prevent="buscar()">
+                <label for="cancion">Buscar canción:</label>
+                <input type="text" id="cancion" name="cancion" x-model="criterio" @input="buscar()" placeholder="Título, artista, id o año...">
+                <button type="submit">Buscar</button>
+               </form>
+             </header>
 
-        <h1>Musica a todo volumen</h1>
-        <form id= "buscador">
-            <label for="cancion">Buscar canción:</label>
-
-            <input type="text" id="cancion" name="cancion">
-
-            <button type="submit">Buscar</button>
-        </form>
-    </header>
-
-        <section id="lista">
-            <h2> Lista de canciones escuchadas:</h2>
-            <article>
-                <p>Nombre De la Canción: </p>
-                <p>Artista: </p>
-                <p>Genero: </p>
-                <p>Año de Lanzamiento: </p>
-            </article>
+    <section id="lista" x-show="cancionesFiltradas.length > 0">
+            <h2>Información de la canción:</h2>
+            <template x-for="item in cancionesFiltradas" :key="item.id">
+             <article @click="reproducir(item)" style="cursor: pointer; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+            <p>Nombre De la Canción: <strong x-text="item.titulo"></strong></p>
+            <p>Artista: <span x-text="item.artista"></span></p>
+            <p>Genero: <span x-text="item.genero"></span></p>
+            <p>Año de Lanzamiento: <span x-text="item.anio"></span></p>
+           </article>
+            </template>
         </section>
 
         
-        <aside>
-            <section id="favorito">
-                <h2>Canciones Favoritas: </h2>
-            </section>
-            <section id="playlist">
-                <h2>Playlist:</h2>
-            </section>
-            </aside>
+    <aside>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catalogo</a></li>
+            <li><a href="playlists.html">Mis Playlists</a></li>
+            <li><a href="favoritos.html">Favoritos</a></li>
+            <li><a href="historial.html">Historial</a></li>
+            <li><a href="estadisticas.html">Estadisticas</a></li>
+        </ul>
+    </nav>
+</aside>
             
-            <footer id="reproductor">
-            <audio id="play" controls src=""></audio>
+    <footer id="reproductor" x-data="{ reproduciendo: false }">
+            <audio id="play" x-ref="audio" :src="cancionActual ? cancionActual.src : ''"></audio>
+             <!--Usare emojis para los simbolos de prueba de el reproductor
+            Despues buscamos en alguna pagina algunos iconos gratis o algo asi--> 
+
+            <div class="controles-principales">
+                <div class="botones-musica">
+                    <button class="boton-uso" aria-label="Aleatorio">🔀</button>
+                    <button class="boton-uso" aria-label="Anterior">⏮</button>
+                    <button class="boton-uso boton-reproducir-pausar"
+                    aria-label="Reproducir/Pausar" 
+                    @click="reproduciendo= !reproduciendo; reproduciendo ? $refs.audio.play(): $refs.audio.pause()">
+                    <span x-text="reproduciendo ? '⏸' : '▶'"></span>
+                    </button>
+                    <button class="boton-uso" aria-label="Siguiente">⏭</button>
+                    <button class="boton-uso" aria-label="Repetir">🔁</button>
+                    </div>
+
+                    <div class="progreso">
+                        <span class="marca-tiempo tiempo-actual">0:01</span>
+                        <input type="range" class="barra" min="0" max="100" value="1" aria-label="Progreso de la canción">
+                        <span class="marca-tiempo tiempo-total">3:08</span>
+                    </div>
+                </div>
             </footer>
-        </main>
 
-
-    <script src="script.js"></script>
-    </body>
-        <section id="historial">
-                <h2>Historial de canciones: </h2>
-            </section>
-        </aside>
+    <script src="js/repositorios/cancionrepository.js"></script>
+    <script src="js/repositorios/localstoragecancionrepository.js"></script>
+    <script src="js/servicios/cancionservicio.js"></script>
+    <script src="js/controladores/cancioncontroller.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('Service Worker registrado correctamente:', reg.scope))
+                    .catch(err => console.error('Error al registrar Service Worker:', err));
+            });
+        }
+    </script>
 </body>
 
 </html>

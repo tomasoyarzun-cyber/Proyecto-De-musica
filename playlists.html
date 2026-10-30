@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Playlists - TuMusic</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#9d72ff">
+</head>
+<body class="bg-[#181818] text-white">    <div id="inicio">
+       <aside>
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catalogo</a></li>
+            <li><a href="playlists.html">Mis Playlists</a></li>
+            <li><a href="favoritos.html">Favoritos</a></li>
+            <li><a href="historial.html">Historial</a></li>
+            <li><a href="estadisticas.html">Estadisticas</a></li>
+        </ul>
+    </nav>
+</aside>
+        <header>
+            <h1>Gestión de Playlists</h1>
+        </header>
+
+        <section id="lista" x-data="playlistData">
+            <h2>Crear nueva playlist</h2>
+            <input type="text" x-model="nuevaPlaylist" placeholder="Nombre de la playlist">
+            <button @click="guardar()">Guardar</button>
+
+            <h2 style="margin-top: 20px;">Tus Playlists</h2>
+            <ul>
+                <template x-for="p in playlists" :key="p.id">
+                    <li style="margin-bottom: 10px;">
+                        <span x-show="editandoId !== p.id" x-text="p.nombre" style="margin-right: 10px;"></span>
+                        <button x-show="editandoId !== p.id" @click="iniciarEdicion(p)">Editar</button>
+                        
+                        <span x-show="editandoId === p.id">
+                            <input type="text" x-model="nombreEdicion">
+                            <button @click="guardarEdicion()">Confirmar</button>
+                        </span>
+                        
+                        <button @click="eliminar(p.id)">Eliminar</button>
+                    </li>
+                </template>
+            </ul>
+        </section>
+    </div>
+
+    <script src="js/repositorios/playlistrepository.js"></script>
+    <script src="js/repositorios/localstorageplaylistrepository.js"></script>
+    <script src="js/servicios/playlistservicio.js"></script>
+    <script src="js/controladores/playlistcontroller.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('Service Worker registrado correctamente:', reg.scope))
+                    .catch(err => console.error('Error al registrar Service Worker:', err));
+            });
+        }
+    </script>
+</body>
+</html>

@@ -12,15 +12,15 @@
     <meta name="theme-color" content="#9d72ff">
     </head>
 
-    <body>
-        <div id="Almacenamiento.principal" x-data='{
+<body class="bg-[#181818] text-white">
+            <div id="Almacenamiento.principal" x-data='{
             busqueda: "",
             reproduciendo: false,
             cancionActual: "Lets Groove - Earth, Wind & Fire",
             canciones: [
             { id: 1, titulo: "Lets Groove", artista: "Earth, Wind & Fire", genero: "Funk/Disco", anio: 1981, archivo: "cancion/1.mp3", favorito:false},
             { id: 2, titulo: "Lights, Camera, Action", artista: "Tee Lopes", genero: "Jazz/Big Band", anio: 2017, archivo: "cancion/2.mp3", favorito:true},
-            { id: 3, titulo: "Teknopathetic", artista: "Hideki Naganuma", genero"Electro/Funk", anio: 2017, archivo:"cancion/3.mp3", favorito:true}
+            { id: 3, titulo: "Teknopathetic", artista: "Hideki Naganuma", genero: "Electro/Funk", anio: 2017, archivo:"cancion/3.mp3", favorito:true}
             ],
             seleccionarCancion(cancion){
                 this.cancionActual= cancion.titulo + "-" + cancion.artista;

@@ -1,4 +1,4 @@
-# TuMusic - Plataforma web de música
+# Studiopolis - Plataforma web de música
 
 ## 1. Descripción del proyecto
 * Es una plataforma web con interfaz estática que funciona como un reproductor de música.

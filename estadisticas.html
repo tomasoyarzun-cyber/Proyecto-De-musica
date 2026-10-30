@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#9d72ff">
 </head>
 <body>
     <div id="inicio" x-data='{
@@ -67,5 +69,14 @@
         </div>
     </main>
 </div>
+<script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('Service Worker registrado correctamente:', reg.scope))
+                    .catch(err => console.error('Error al registrar Service Worker:', err));
+            });
+        }
+    </script>
 </body>
 </html>

@@ -5,6 +5,8 @@
     <title>Playlists - TuMusic</title>
     <link rel="stylesheet" href="style.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#9d72ff">
 </head>
 <body>
     <div id="inicio">
@@ -53,5 +55,14 @@
     <script src="js/servicios/playlistservicio.js"></script>
     <script src="js/controladores/playlistcontroller.js"></script>
     <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('Service Worker registrado correctamente:', reg.scope))
+                    .catch(err => console.error('Error al registrar Service Worker:', err));
+            });
+        }
+    </script>
 </body>
 </html>

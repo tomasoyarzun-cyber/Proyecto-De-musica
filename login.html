@@ -1,23 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Iniciar Sesión</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <meta name="theme-color" content="#9d72ff">
 </head>
-<body class="bg-[#181818] text-white"> <section id="login">
-        <h1>Studiopolis</h1>
-        <p>Ama la musica</p>
-        <p>Primero tienes que autenticarte</p>
+<body class="bg-black min-h-screen flex items-center justify-center font-sans antialiased">
+    <section id="login" class="bg-marca p-10 rounded-2xl shadow-2xl w-full max-w-sm text-center">
+        
+        <h1 class="text-4xl font-extrabold text-white tracking-tight mb-1">Studiopolis </h1>
+        <p class="text-white/80 text-sm font-medium tracking-widest uppercase mb-8">Siente la melodia</p>
+        <p class="text-white/80 text-base mb-6 font-medium">Primero tienes que autenticarte</p>
 
-        <form action="index.html">
-            <label for="nombre">Nombre de usuario</label>
-            <input id="nombre" type="text" name="nombre" required>
-            <button type="submit">Iniciar Sesión</button>
+        <form action="catalogo.html" class="flex flex-col gap-5">
+            <div class="flex flex-col text-left gap-2">
+                <label for="nombre" class="text-sm font-bold text-white ml-1">Nombre de usuario</label>
+                <input
+                id="nombre"
+                type="text"
+                name="nombre"
+                required
+                placeholder="Escribe tu nombre de usuario"
+                class="w-full bg-[#121212] border border-white/10 rounded-xl px-3 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-marca focus:ring-1 focus:ring-marca transition-all duration-300">
+            </div>
+
+            <button 
+            type="submit" 
+            class="w-full bg-black text-white font-bold py-3.5 px-4 rounded-xl mt-2 hover:brightness-110 active:scale-95 transition-all duration-200 cursor-pointer shadow-lg shadow-marca/20"
+            >Iniciar sesión
+        </button>
         </form>
     </section>
     <script>

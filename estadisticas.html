@@ -1,75 +1,99 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estadisticas-Studiopolis</title>
+    <meta charset="UTF-8">
+    <title>Studiopolis - Estadísticas</title>
     <link rel="stylesheet" href="style.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#9d72ff">
 </head>
-<body>
-    <div id="inicio" x-data='{
-        minutosEscuchados: 12450,
-        artistaTop: "Earth, Wind & Fire",
-        generoTop: "Funk/Disco",
-        cancionesMasEscuchadas: [
-        {titulo: "Lets Groove", reproducciones:342},
-        {titulo: "Teknopathetic", reproducciones:289},
-        {titulo: "Lights, Camera, Action", reproducciones:156}]
-    }'>
-    <header>
-        <h1>Tus Estadisticas</h1>
-    </header>
 
-    <aside>
-        <h2>Studiopolis</h2>
-        <nav aria-label="Menu Principal">
-            <ul class="menu-navegacion">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="catalogo.html">Catálogo</a></li>
-            <li><a href="playlists.html">Mis Playlists</a></li>
-            <li><a href="favoritos.html">Favoritos</a></li>
-            <li><a href="historial.html">Historial</a></li>
-            <li><a href="estadisticas.html" class="activo">Estadísticas</a></li>
-            <li><a href="login.html">Cerrar Sesión</a></li>
-            </ul>
-        </nav>
-    </aside>
+<body class="bg-[#181818] text-white">
+    
+    <section id="inicio" x-data="{
+        favoritos: JSON.parse(localStorage.getItem('favoritos_studiopolis')) || [],
+        historial: JSON.parse(localStorage.getItem('historial_studiopolis')) || [],
+        totalClicks: parseInt(localStorage.getItem('clicks_studiopolis')) || 0,
+        segundosEscuchados: parseInt(localStorage.getItem('tiempo_reproducido_studiopolis')) || 0,
 
-    <main id="lista">
-        <h2>Tu Resumen Musical</h2>
-        <div class="conjunto-catalogo">
-            <article class="ficha-cancion">
-                <h3>Tiempo Total</h3>
-                <p class="text-4xl font-bold text-marca"><span x-text="minutosEscuchados"></span> min</p>       
-            </article>
+        get totalFavoritos() {
+            return this.favoritos.length;
+        },
 
-            <article class="ficha-cancion">
-                <h3>Artista Favorito</h3>
-                <p class="text-2xl font-bold" x-text="artistaTop"></p>
-            </article>
+        get tiempoFormateado() {
+            const horas = Math.floor(this.segundosEscuchados / 3600);
+            const minutos = Math.floor((this.segundosEscuchados % 3600) / 60);
+            if (horas > 0) {
+                return `${horas}h ${minutos}m`;
+            }
+            return `${minutos} min`;
+        },
 
-            <article class="ficha-cancion">
-                <h3>Género principal</h3>
-                <p class="text-2xl font-bold" x-text="generoTop"></p>
-            </article>
-        </div>
+        get cancionMasEscuchada() {
+            if (this.historial.length === 0) return 'Ninguna';
+            const conteo = {};
+            this.historial.forEach(c => {
+                const titulo = c.titulo || c;
+                conteo[titulo] = (conteo[titulo] || 0) + 1;
+            });
+            return Object.keys(conteo).reduce((a, b) => conteo[a] > conteo[b] ? a : b, 'Ninguna');
+        },
 
-        <h2 class="mt-8 mb-4">Top Canciones</h2>
-        <div class="conjunto-catalogo">
-            <template x-for="(cancion, index) in cancionesMasEscuchadas" :key="index">
-              <article class="ficha-cancion">
-                <h3 x-text=" '#' + (index+1) + ' ' + cancion.titulo"></h3>
-                <p>Reproducciones: <strong class="text-marca" x-text="cancion.reproducciones"></strong></p>
-              </article>   
-            </template>
-        </div>
-    </main>
-</div>
-<script>
+        get generoTop() {
+            if (this.favoritos.length === 0) return 'Sin datos';
+            const conteo = {};
+            this.favoritos.forEach(c => {
+                if (c.genero) conteo[c.genero] = (conteo[c.genero] || 0) + 1;
+            });
+            return Object.keys(conteo).reduce((a, b) => conteo[a] > conteo[b] ? a : b, 'Sin datos');
+        }
+    }">
+        <header class="p-4">
+            <h1>Tus Estadísticas</h1>
+        </header>
+
+        <section id="lista" class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-[#242424] p-6 rounded-lg border border-gray-700">
+                <h3 class="text-gray-400 text-sm">Tiempo Reproducido</h3>
+                <p class="text-3xl font-bold text-[#9d72ff] mt-2" x-text="tiempoFormateado"></p>
+            </div>
+
+            <div class="bg-[#242424] p-6 rounded-lg border border-gray-700">
+                <h3 class="text-gray-400 text-sm">Total de Clics</h3>
+                <p class="text-3xl font-bold text-white mt-2" x-text="totalClicks"></p>
+            </div>
+
+            <div class="bg-[#242424] p-6 rounded-lg border border-gray-700">
+                <h3 class="text-gray-400 text-sm">Canción Más Escuchada</h3>
+                <p class="text-xl font-bold text-white mt-2 truncate" x-text="cancionMasEscuchada"></p>
+            </div>
+
+            <div class="bg-[#242424] p-6 rounded-lg border border-gray-700">
+                <h3 class="text-gray-400 text-sm">Favoritas / Género Top</h3>
+                <p class="text-xl font-bold text-[#9d72ff] mt-2">
+                    <span x-text="totalFavoritos"></span> canciones (<span x-text="generoTop"></span>)
+                </p>
+            </div>
+        </section>
+
+        <aside>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="catalogo.html">Catalogo</a></li>
+                    <li><a href="playlists.html">Mis Playlists</a></li>
+                    <li><a href="favoritos.html">Favoritos</a></li>
+                    <li><a href="historial.html">Historial</a></li>
+                    <li><a href="estadisticas.html">Estadisticas</a></li>
+                </ul>
+            </nav>
+        </aside>
+    </section>
+
+    <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./service-worker.js')
@@ -79,4 +103,5 @@
         }
     </script>
 </body>
+
 </html>

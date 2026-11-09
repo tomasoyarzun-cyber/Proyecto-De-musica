@@ -9,73 +9,147 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#9d72ff">
-
-    </head>
+</head>
 
 <body class="bg-[#181818] text-white">
     
-    
     <section id="inicio" x-data="cancionData">
-        <header>
-            <h1>Musica a todo volumen</h1>
-            <form id="buscador" @submit.prevent="buscar()">
-                <label for="cancion">Buscar canción:</label>
-                <input type="text" id="cancion" name="cancion" x-model="criterio" @input="buscar()" placeholder="Título, artista, id o año...">
-                <button type="submit">Buscar</button>
-               </form>
-             </header>
+        <header class="flex justify-between items-center p-4">
+           <h1>Musica a todo volumen</h1>
+         <form id="buscador" @submit.prevent="buscar()" class="flex items-center gap-2">
+        <label for="cancion" class="text-sm">Buscar canción:</label>
+        <input 
+            type="text" 
+            id="cancion" 
+            name="cancion" 
+            x-model="criterio" 
+            @input="buscar()" 
+            placeholder="Título, artista, id o año..."
+            class="bg-transparent text-white border border-gray-400 rounded-md px-3 py-1 text-sm outline-none focus:border-white w-64 placeholder-gray-400">
+    </form>
+</header>
 
-    <section id="lista" x-show="cancionesFiltradas.length > 0">
+        <section id="lista" x-show="cancionesFiltradas.length > 0">
             <h2>Información de la canción:</h2>
             <template x-for="item in cancionesFiltradas" :key="item.id">
-             <article @click="reproducir(item)" style="cursor: pointer; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;">
-            <p>Nombre De la Canción: <strong x-text="item.titulo"></strong></p>
-            <p>Artista: <span x-text="item.artista"></span></p>
-            <p>Genero: <span x-text="item.genero"></span></p>
-            <p>Año de Lanzamiento: <span x-text="item.anio"></span></p>
-           </article>
+                <article style="cursor: pointer; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;" class="flex justify-between items-center">
+                    <div @click="reproducir(item); $dispatch('cambiar-cancion', item)" class="flex-grow">
+                        <p>Nombre De la Canción: <strong x-text="item.titulo"></strong></p>
+                        <p>Artista: <span x-text="item.artista"></span></p>
+                        <p>Genero: <span x-text="item.genero"></span></p>
+                        <p>Año de Lanzamiento: <span x-text="item.anio"></span></p>
+                    </div>
+
+                    <button 
+                        type="button" 
+                        class="text-2xl cursor-pointer hover:scale-125 transition-transform px-4 py-2" 
+                        @click="toggleFavorito(item)" 
+                        :title="esFavorito(item.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'">
+                        <span x-text="esFavorito(item.id) ? '❤️' : '🤍'"></span>
+                    </button>
+                </article>
             </template>
         </section>
 
-        
-    <aside>
-    <nav>
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="catalogo.html">Catalogo</a></li>
-            <li><a href="playlists.html">Mis Playlists</a></li>
-            <li><a href="favoritos.html">Favoritos</a></li>
-            <li><a href="historial.html">Historial</a></li>
-            <li><a href="estadisticas.html">Estadisticas</a></li>
-        </ul>
-    </nav>
-</aside>
+        <aside>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="catalogo.html">Catalogo</a></li>
+                    <li><a href="playlists.html">Mis Playlists</a></li>
+                    <li><a href="favoritos.html">Favoritos</a></li>
+                    <li><a href="historial.html">Historial</a></li>
+                    <li><a href="estadisticas.html">Estadisticas</a></li>
+                </ul>
+            </nav>
+        </aside>
             
-    <footer id="reproductor" x-data="{ reproduciendo: false }">
-            <audio id="play" x-ref="audio" :src="cancionActual ? cancionActual.src : ''"></audio>
-             <!--Usare emojis para los simbolos de prueba de el reproductor
-            Despues buscamos en alguna pagina algunos iconos gratis o algo asi--> 
+        <footer id="reproductor" 
+                x-data="{
+                    reproduciendo: false,
+                    tiempoActual: '0:00',
+                    duracionTotal: '0:00',
+                    progreso: 0,
+                    
+                    formatearTiempo(segundos) {
+                        if (isNaN(segundos) || segundos === 0) return '0:00';
+                        const min = Math.floor(segundos / 60);
+                        const seg = Math.floor(segundos % 60);
+                        return min + ':' + (seg < 10 ? '0' : '') + seg;
+                    },
+                    
+                    actualizarProgreso() {
+                        const audio = this.$refs.audio;
+                        if (audio && audio.duration) {
+                            this.tiempoActual = this.formatearTiempo(audio.currentTime);
+                            this.duracionTotal = this.formatearTiempo(audio.duration);
+                            this.progreso = (audio.currentTime / audio.duration) * 100;
+                        }
+                    },
+                    
+                    cambiarTiempo(e) {
+                        const audio = this.$refs.audio;
+                        if (audio && audio.duration) {
+                            audio.currentTime = (e.target.value / 100) * audio.duration;
+                        }
+                    },
+                    
+                    cargarCancion(cancion) {
+                        const audio = this.$refs.audio;
+                        if (audio && cancion) {
+                            audio.src = cancion.src || cancion.archivo;
+                            audio.load();
+                            audio.play().then(() => {
+                                this.reproduciendo = true;
+                            }).catch(err => console.log('Esperando reproduccion...', err));
+                        }
+                    }
+                }"
+                @cambiar-cancion.window="cargarCancion($event.detail)">
+
+            <audio id="play" 
+                   x-ref="audio" 
+                   :src="cancionActual ? cancionActual.src : ''"
+                   @timeupdate="actualizarProgreso()"
+                   @loadedmetadata="actualizarProgreso()">
+            </audio>
 
             <div class="controles-principales">
-                <div class="botones-musica">
+                <div class="botones-musica flex items-center gap-3">
                     <button class="boton-uso" aria-label="Aleatorio">🔀</button>
                     <button class="boton-uso" aria-label="Anterior">⏮</button>
                     <button class="boton-uso boton-reproducir-pausar"
-                    aria-label="Reproducir/Pausar" 
-                    @click="reproduciendo= !reproduciendo; reproduciendo ? $refs.audio.play(): $refs.audio.pause()">
-                    <span x-text="reproduciendo ? '⏸' : '▶'"></span>
+                            aria-label="Reproducir/Pausar" 
+                            @click="reproduciendo = !reproduciendo; reproduciendo ? $refs.audio.play() : $refs.audio.pause()">
+                        <span x-text="reproduciendo ? '⏸' : '▶'"></span>
                     </button>
                     <button class="boton-uso" aria-label="Siguiente">⏭</button>
                     <button class="boton-uso" aria-label="Repetir">🔁</button>
-                    </div>
-
-                    <div class="progreso">
-                        <span class="marca-tiempo tiempo-actual">0:01</span>
-                        <input type="range" class="barra" min="0" max="100" value="1" aria-label="Progreso de la canción">
-                        <span class="marca-tiempo tiempo-total">3:08</span>
-                    </div>
+                    
+                    <button 
+                        type="button" 
+                        class="text-xl cursor-pointer hover:scale-125 transition-transform ml-2" 
+                        x-show="cancionActual !== null"
+                        @click="toggleFavorito(cancionActual)" 
+                        :title="cancionActual && esFavorito(cancionActual.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'">
+                        <span x-text="cancionActual && esFavorito(cancionActual.id) ? '❤️' : '🤍'"></span>
+                    </button>
                 </div>
-            </footer>
+
+                <div class="progreso">
+                    <span class="marca-tiempo tiempo-actual" x-text="tiempoActual"></span>
+                    <input type="range" 
+                           class="barra" 
+                           min="0" 
+                           max="100" 
+                           :value="progreso" 
+                           @input="cambiarTiempo($event)" 
+                           aria-label="Progreso de la canción">
+                    <span class="marca-tiempo tiempo-total" x-text="duracionTotal"></span>
+                </div>
+            </div>
+        </footer>
+    </section>
 
     <script src="js/repositorios/cancionrepository.js"></script>
     <script src="js/repositorios/localstoragecancionrepository.js"></script>

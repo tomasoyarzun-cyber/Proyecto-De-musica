@@ -48,7 +48,6 @@ self.addEventListener('fetch', (event) => {
         return cachedResponse;
       }
       return fetch(event.request).catch(() => {
-        // Retorno de respaldo si falla la red
         if (event.request.mode === 'navigate') {
           return caches.match('./index.html');
         }

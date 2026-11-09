@@ -7,70 +7,95 @@
     <title>Catálogo-Studiopolis</title>
     <link rel="stylesheet" href="style.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#9d72ff">
-    </head>
+</head>
 
-<body class="bg-[#181818] text-white">
-            <div id="Almacenamiento.principal" x-data='{
-            busqueda: "",
-            reproduciendo: false,
-            cancionActual: "Lets Groove - Earth, Wind & Fire",
-            canciones: [
-            { id: 1, titulo: "Lets Groove", artista: "Earth, Wind & Fire", genero: "Funk/Disco", anio: 1981, archivo: "cancion/1.mp3", favorito:false},
-            { id: 2, titulo: "Lights, Camera, Action", artista: "Tee Lopes", genero: "Jazz/Big Band", anio: 2017, archivo: "cancion/2.mp3", favorito:true},
-            { id: 3, titulo: "Teknopathetic", artista: "Hideki Naganuma", genero: "Electro/Funk", anio: 2017, archivo:"cancion/3.mp3", favorito:true}
-            ],
-            seleccionarCancion(cancion){
-                this.cancionActual= cancion.titulo + "-" + cancion.artista;
-                this.$refs.audio.src = cancion.archivo;
-                this.$refs.audio.play();
-                this.reproduciendo = true;
+<body class="bg-[#181818] text-white flex flex-col min-h-screen">
+    
+    <div id="Almacenamiento.principal" class="flex flex-col min-h-screen pb-28" x-data='{
+        busqueda: "",
+        reproduciendo: false,
+        cancionActual: null,
+        favoritos: JSON.parse(localStorage.getItem("favoritos_studiopolis")) || [],
+        canciones: [
+            { id: 1, titulo: "Lets Groove", artista: "Earth, Wind & Fire", genero: "Funk/Disco", anio: 1981, archivo: "cancion/1.mp3" },
+            { id: 2, titulo: "Lights, Camera, Action", artista: "Tee Lopes", genero: "Jazz/Big Band", anio: 2017, archivo: "cancion/2.mp3" },
+            { id: 3, titulo: "Teknopathetic", artista: "Hideki Naganuma", genero: "Electro/Funk", anio: 2017, archivo: "cancion/3.mp3" }
+        ],
+        esFavorito(id) {
+            return this.favoritos.some(fav => fav.id === id);
+        },
+        toggleFavorito(cancion) {
+            if (this.esFavorito(cancion.id)) {
+                this.favoritos = this.favoritos.filter(fav => fav.id !== cancion.id);
+            } else {
+                this.favoritos.push(cancion);
             }
-        }'>
+            localStorage.setItem("favoritos_studiopolis", JSON.stringify(this.favoritos));
+        },
+        seleccionarCancion(cancion) {
+            this.cancionActual = cancion;
 
-        <header>
-            <h1>Catálogo-Studiopolis</h1>
+            let clicks = parseInt(localStorage.getItem("clicks_studiopolis")) || 0;
+            localStorage.setItem("clicks_studiopolis", clicks + 1);
 
-                <form id="Buscador" @submit.prevent>
-                    <label for="busqueda">Busca canción o artista:</label>
-                    <input type="text" id="busqueda" name="cancion" x-model="busqueda" placeholder="Ej. OyarzunDeidad, Phonk">
-                    <button type="submit">Buscar</button>             
-                </form>
-            </header>
+            let historial = JSON.parse(localStorage.getItem("historial_studiopolis")) || [];
+            historial.push(cancion);
+            localStorage.setItem("historial_studiopolis", JSON.stringify(historial));
 
-        <aside>
-            <h2>Studiopolis</h2>
+            window.dispatchEvent(new CustomEvent("cambiar-cancion", { detail: cancion }));
+        }
+    }'>
+
+        <header class="bg-black text-white px-8 py-4 flex justify-between items-center border-b border-gray-900">
+            <h1 class="text-2xl font-bold">Catálogo-Studiopolis</h1>
+
+            <form id="Buscador" @submit.prevent class="flex items-center gap-2">
+                <label for="busqueda" class="text-sm font-medium">Busca canción o artista:</label>
+                <input type="text" id="busqueda" name="cancion" x-model="busqueda" placeholder="Ej. OyarzunDeidad, Phonk" class="bg-white text-black rounded px-2 py-0.5 text-sm outline-none border border-gray-300 w-56">
+                <button type="submit" class="bg-white text-black px-3 py-0.5 rounded text-sm font-medium hover:bg-gray-200 transition-colors cursor-pointer">Buscar</button>             
+            </form>
+        </header>
+
+        <aside class="bg-black text-white px-8 py-6 border-b border-gray-900">
+            <h2 class="text-xl font-bold mb-4">Studiopolis</h2>
             <nav aria-label="Menu Principal">
-                <ul class="manu-navegacion">
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="catalogo.html" class="activo"></a></li>
-                    <li><a href="playlists.html">Playlists</a></li>
-                    <li><a href="favoritos.html">Favoritos</a></li>
-                    <li><a href="historial.html">Historial</a></li>
-                    <li><a href="estadisticas.html">Estadisticas</a></li>
-                    <li><a href="login.html">Cerrar Sesion</a></li>
+                <ul class="manu-navegacion list-disc list-inside space-y-1 text-sm">
+                    <li><a href="index.html" class="hover:underline">Inicio</a></li>
+                    <li><a href="playlists.html" class="hover:underline">Playlists</a></li>
+                    <li><a href="favoritos.html" class="hover:underline">Favoritos</a></li>
+                    <li><a href="historial.html" class="hover:underline">Historial</a></li>
+                    <li><a href="estadisticas.html" class="hover:underline">Estadísticas</a></li>
+                    <li><a href="login.html" class="hover:underline">Cerrar Sesión</a></li>
                 </ul>
             </nav>
         </aside>
 
-        <main id="lista">
-            <h2>Explorar Canciones y Artistas</h2>
+        <main id="lista" class="p-8 flex-1 bg-[#181818]">
+            <h2 class="text-xl font-bold text-white mb-6">Explorar Canciones y Artistas</h2>
 
-            <div class="conjunto-catalogo">
+            <div class="conjunto-catalogo" style="background: transparent !important; padding: 0 !important; border: none !important; display: flex !important; flex-wrap: wrap !important; gap: 24px !important; align-items: flex-start !important;">
                 <template x-for="cancion in canciones.filter(pista => pista.titulo.toLowerCase().includes(busqueda.toLowerCase()) || pista.artista.toLowerCase().includes(busqueda.toLowerCase()) || pista.genero.toLowerCase().includes(busqueda.toLowerCase()))" :key="cancion.id">
-                    <article class="ficha-cancion">
-                        <h3 x-text="cancion.titulo"></h3>
-                        <p><strong>Artista:</strong> <span x-text="cancion.artista"></span></p>
-                        <p><strong>Genero:</strong> <span x-text="cancion.genero"></span></p>
-                        <p><strong>Año:</strong> <span x-text="cancion.anio"></span></p>
+                    <article class="ficha-cancion" style="background-color: #242424 !important; padding: 20px !important; border-radius: 12px !important; width: 320px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; border: 1px solid #333 !important; margin: 0 !important;">
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="color: #9d72ff; font-weight: bold; font-size: 1.125rem; margin-bottom: 12px;" x-text="cancion.titulo"></h3>
+                            <p style="color: #e5e7eb; font-size: 0.875rem; margin-bottom: 6px;"><strong style="color: #ffffff;">Artista:</strong> <span x-text="cancion.artista"></span></p>
+                            <p style="color: #e5e7eb; font-size: 0.875rem; margin-bottom: 6px;"><strong style="color: #ffffff;">Genero:</strong> <span x-text="cancion.genero"></span></p>
+                            <p style="color: #e5e7eb; font-size: 0.875rem;"><strong style="color: #ffffff;">Año:</strong> <span x-text="cancion.anio"></span></p>
+                        </div>
 
-                        <div class="acciones-ficha">
-                            <button type="button" class="boton-escuchar" @click="seleccionarCancion(cancion)">
+                        <div class="acciones-ficha" style="display: flex !important; gap: 12px !important; align-items: center !important;">
+                            <button type="button" class="boton-escuchar" style="background-color: #9d72ff; color: white; padding: 8px 16px; border-radius: 9999px; font-weight: 500; font-size: 0.75rem; border: none; cursor: pointer; white-space: nowrap;" @click="seleccionarCancion(cancion)">
                                 Escuchar
                             </button>
-                            <button type="button" class="boton-escuchar" @click="cancion.favorito = !cancion.favorito" aria-label="Marcar como favorito">
-                              <span x-text="cancion.favorito ? 'En favoritos' : 'Agregar a favoritos'"></span>  
+                            <button type="button" 
+                                    class="boton-escuchar" 
+                                    style="background-color: #9d72ff; color: white; padding: 8px 16px; border-radius: 9999px; font-weight: 500; font-size: 0.75rem; border: none; cursor: pointer; white-space: nowrap;"
+                                    @click="toggleFavorito(cancion)" 
+                                    aria-label="Marcar como favorito">
+                              <span x-text="esFavorito(cancion.id) ? 'En favoritos' : 'Agregar a favoritos'"></span>  
                             </button>
                         </div>                         
                     </article>
@@ -78,33 +103,105 @@
             </div>
         </main>
 
-        <footer id="reproductor">
-            <audio id="audio-reproductor" x-ref="audio" src="cancion/1.mp3"></audio>
-            <div class="controles">
-                <p class="cancion-activa" x-text=" 'Sonando: ' + cancionActual"></p>
+        <footer id="reproductor" 
+                class="fixed bottom-0 left-0 right-0 bg-black border-t border-[#9d72ff]/40 px-8 py-4 flex items-center justify-between z-50 h-20"
+                x-data="{
+                    reproduciendo: false,
+                    cancionSonando: null,
+                    tiempoActual: '0:01',
+                    duracionTotal: '3:08',
+                    progreso: 0,
+                    intervaloTiempo: null,
+                    
+                    formatearTiempo(segundos) {
+                        if (isNaN(segundos) || segundos === 0) return '0:00';
+                        const min = Math.floor(segundos / 60);
+                        const seg = Math.floor(segundos % 60);
+                        return min + ':' + (seg < 10 ? '0' : '') + seg;
+                    },
+                    
+                    actualizarProgreso() {
+                        const audio = this.$refs.audio;
+                        if (audio && audio.duration) {
+                            this.tiempoActual = this.formatearTiempo(audio.currentTime);
+                            this.duracionTotal = this.formatearTiempo(audio.duration);
+                            this.progreso = (audio.currentTime / audio.duration) * 100;
+                        }
+                    },
+                    
+                    cambiarTiempo(e) {
+                        const audio = this.$refs.audio;
+                        if (audio && audio.duration) {
+                            audio.currentTime = (e.target.value / 100) * audio.duration;
+                        }
+                    },
+                    
+                    cargarCancion(cancion) {
+                        const audio = this.$refs.audio;
+                        if (audio && cancion) {
+                            this.cancionSonando = cancion;
+                            audio.src = cancion.archivo || cancion.src;
+                            audio.load();
+                            audio.play().then(() => {
+                                this.reproduciendo = true;
+                                this.iniciarConteoTiempo();
+                            }).catch(err => console.log('Error de reproducción:', err));
+                        }
+                    },
 
-                <div class="botonera-musica">
-                    <button class="boton-accion" aria-label="Aleatorio">Aleatorio</button>
-                    <button class="boton-accion" aria-label="Anterior">Anterior</button>
+                    iniciarConteoTiempo() {
+                        if (this.intervaloTiempo) clearInterval(this.intervaloTiempo);
+                        this.intervaloTiempo = setInterval(() => {
+                            if (this.reproduciendo) {
+                                let seg = parseInt(localStorage.getItem('tiempo_reproducido_studiopolis')) || 0;
+                                localStorage.setItem('tiempo_reproducido_studiopolis', seg + 1);
+                            }
+                        }, 1000);
+                    }
+                }"
+                @cambiar-cancion.window="cargarCancion($event.detail)">
 
-                    <button class="boton-accion boton-reproducir-pausar"
-                    aria-label="Reproducir o Pausar"
-                    @click="reproduciendo = !reproduciendo; reproduciendo ? $refs.audio.play() : $refs.audio.pause() ">
-                <span x-text="reproduciendo ? 'Pausar' : 'Reproducir'"></span>
-                </button>
+            <audio id="audio-reproductor" 
+                   x-ref="audio" 
+                   src="cancion/1.mp3"
+                   @timeupdate="actualizarProgreso()"
+                   @loadedmetadata="actualizarProgreso()"
+                   @ended="reproduciendo = false">
+            </audio>
 
-                <button class="boton-accion" aria-label="Siguiente">Siguiente</button>
-                <button class="boton-accion" aria-label="Repetir">Repetir</button>
+            <div class="controles flex-1 flex items-center justify-between w-full">
+                <p class="cancion-activa text-sm font-medium text-white truncate max-w-sm" 
+                   x-text="cancionSonando ? 'Sonando: ' + cancionSonando.titulo + ' - ' + cancionSonando.artista : 'Sonando: Lets Groove - Earth, Wind & Fire'"></p>
+
+                <div class="botonera-musica flex items-center gap-6">
+                    <button class="boton-accion text-white text-xs font-bold hover:text-gray-300 cursor-pointer" aria-label="Aleatorio">Aleatorio</button>
+                    <button class="boton-accion text-white text-xs font-bold hover:text-gray-300 cursor-pointer" aria-label="Anterior">Anterior</button>
+
+                    <button class="boton-accion boton-reproducir-pausar bg-white text-black px-6 py-1.5 rounded-full font-bold text-xs hover:scale-105 transition-transform cursor-pointer"
+                            aria-label="Reproducir o Pausar"
+                            @click="if ($refs.audio.src) { reproduciendo = !reproduciendo; reproduciendo ? $refs.audio.play() : $refs.audio.pause(); }">
+                        <span x-text="reproduciendo ? 'Pausar' : 'Reproducir'"></span>
+                    </button>
+
+                    <button class="boton-accion text-white text-xs font-bold hover:text-gray-300 cursor-pointer" aria-label="Siguiente">Siguiente</button>
+                    <button class="boton-accion text-white text-xs font-bold hover:text-gray-300 cursor-pointer" aria-label="Repetir">Repetir</button>
                 </div>
 
-            <div class="progreso">
-                <span class="marca-tiempo tiempo-actual">0:01</span>
-                <input type="range" class="barra-deslizante" min="0" max="100" value="1" aria-label="Progreso de la canción">
-                <span class="marca-tiempo tiempo-total">3:08</span>
+                <div class="progreso flex items-center gap-3">
+                    <span class="marca-tiempo tiempo-actual text-xs font-mono text-white" x-text="tiempoActual">0:01</span>
+                    <input type="range" 
+                           min="0" 
+                           max="100" 
+                           :value="progreso" 
+                           @input="cambiarTiempo($event)" 
+                           class="barra-deslizante w-56 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-500" 
+                           aria-label="Progreso de la canción">
+                    <span class="marca-tiempo tiempo-total text-xs font-mono text-white" x-text="duracionTotal">3:08</span>
+                </div>
             </div>
-          </div>
         </footer>
     </div>
+
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -115,8 +212,8 @@
         }
     </script>
 </body>
-</html>
 
+</html>
 
 
 

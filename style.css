@@ -1,24 +1,22 @@
 
-@import "tailwindcss";
-
-@theme {
+:root {
     --color-marca: #9d72ff;
     --color-fondo: #181818;
     --color-panel: #000000;
     --color-tarjeta: #242424;
 }
 
-@utility ficha-cancion {
+.ficha-cancion {
     background-color: var(--color-tarjeta);
     padding: 15px;
     border-radius: 8px;
     transition: background-color 0.3s ease;
-    &:hover{
-        background-color: #333333;
-    }
+}
+.ficha-cancion:hover {
+    background-color: #333333;
 }
 
-@utility boton-escuchar {
+.boton-escuchar {
     background-color: var(--color-marca);
     color: white;
     border: none;
@@ -28,10 +26,11 @@
     font-weight: bold;
     flex-grow: 1;
     transition: background-color 0.2s ease;
-    &:hover{
-        opacity: 0.9;
-    }
 }
+.boton-escuchar:hover {
+    opacity: 0.9;
+}
+
 body {
     margin: 0;
     background-color: var(--color-fondo);

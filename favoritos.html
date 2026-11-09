@@ -1,37 +1,189 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <title>Studiopolis</title>
+    <title>Studiopolis - Favoritos</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#9d72ff">
 </head>
-<body class="bg-[#181818] text-white">
-    <div id="inicio">
-        <aside>
-    <nav>
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="catalogo.html">Catalogo</a></li>
-            <li><a href="playlists.html">Mis Playlists</a></li>
-            <li><a href="favoritos.html">Favoritos</a></li>
-            <li><a href="historial.html">Historial</a></li>
-            <li><a href="estadisticas.html">Estadisticas</a></li>
-        </ul>
-    </nav>
-</aside>
 
-        <header>
-            <h1>Musica a todo volumen</h1>
-        </header>
+<body class="bg-[#121212] text-white flex flex-col min-h-screen">
+    
+    <div id="inicio" class="flex flex-1 pb-24" x-data="{
+        cancionActual: null,
+        favoritos: JSON.parse(localStorage.getItem('favoritos_studiopolis')) || [],
+        
+        quitarFavorito(id) {
+            this.favoritos = this.favoritos.filter(fav => fav.id !== id);
+            localStorage.setItem('favoritos_studiopolis', JSON.stringify(this.favoritos));
+        },
+        reproducir(cancion) {
+            this.cancionActual = cancion;
 
-        <section id="lista">
-            <h2>Favoritos</h2> 
-            <p>La interfaz está lista, funcionalidades próximamente.</p>
-        </section>
+            let clicks = parseInt(localStorage.getItem('clicks_studiopolis')) || 0;
+            localStorage.setItem('clicks_studiopolis', clicks + 1);
+
+            let historial = JSON.parse(localStorage.getItem('historial_studiopolis')) || [];
+            historial.push(cancion);
+            localStorage.setItem('historial_studiopolis', JSON.stringify(historial));
+
+            window.dispatchEvent(new CustomEvent('cambiar-cancion', { detail: cancion }));
+        }
+    }">
+        <aside class="w-64 bg-black p-6 flex flex-col min-h-screen">
+            <h2 class="text-xl font-bold mb-8 text-white">Studiopolis</h2>
+            <nav class="flex-1">
+                <ul class="space-y-4">
+                    <li><a href="index.html" class="hover:text-[#9d72ff] transition-colors">Inicio</a></li>
+                    <li><a href="catalogo.html" class="hover:text-[#9d72ff] transition-colors">Catálogo</a></li>
+                    <li><a href="playlists.html" class="hover:text-[#9d72ff] transition-colors">Mis Playlists</a></li>
+                    <li><a href="favoritos.html" class="text-[#9d72ff] font-semibold">Favoritos</a></li>
+                    <li><a href="historial.html" class="hover:text-[#9d72ff] transition-colors">Historial</a></li>
+                    <li><a href="estadisticas.html" class="hover:text-[#9d72ff] transition-colors">Estadísticas</a></li>
+                </ul>
+            </nav>
+            <div class="mt-auto pt-6">
+                <a href="login.html" class="hover:text-red-400 transition-colors text-sm">Cerrar Sesión</a>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-8 bg-[#181818]">
+            <header class="mb-8">
+                <h1 class="text-2xl font-normal text-white">Tus Canciones Favoritas</h1>
+            </header>
+
+            <section>
+                <h2 class="text-lg text-gray-300 mb-6" x-text="`Mis Favoritos (${favoritos.length})`"></h2>
+                
+                <div class="flex flex-wrap gap-6">
+                    <template x-for="item in favoritos" :key="item.id">
+                        <article class="bg-[#242424] p-5 rounded-lg w-72 flex flex-col justify-between border border-gray-800">
+                            <div class="mb-6">
+                                <h3 class="text-[#9d72ff] font-medium text-lg mb-3" x-text="item.titulo"></h3>
+                                <p class="text-gray-300 text-sm mb-1"><strong class="text-white">Artista:</strong> <span x-text="item.artista"></span></p>
+                                <p class="text-gray-300 text-sm mb-1"><strong class="text-white">Género:</strong> <span x-text="item.genero"></span></p>
+                                <p class="text-gray-300 text-sm"><strong class="text-white">Año:</strong> <span x-text="item.anio"></span></p>
+                            </div>
+
+                            <div class="flex gap-3">
+                                <button 
+                                    type="button" 
+                                    @click="reproducir(item)" 
+                                    class="flex-1 bg-[#9d72ff] hover:bg-[#8b5cf6] text-white py-2 rounded-full font-medium text-sm transition-colors cursor-pointer">
+                                    Escuchar
+                                </button>
+                                <button 
+                                    type="button" 
+                                    @click="quitarFavorito(item.id)" 
+                                    class="bg-[#cc0000] hover:bg-red-700 text-white px-5 py-2 rounded-full font-medium text-sm transition-colors cursor-pointer">
+                                    Quitar
+                                </button>
+                            </div>
+                        </article>
+                    </template>
+                </div>
+
+                <template x-if="favoritos.length === 0">
+                    <p class="text-gray-400 mt-4">No tienes canciones en favoritos actualmente.</p>
+                </template>
+            </section>
+        </main>
+
+        <footer class="fixed bottom-0 left-0 right-0 bg-black border-t border-[#9d72ff]/30 px-6 py-4 flex items-center justify-between z-50 h-20"
+                x-data="{
+                    reproduciendo: false,
+                    cancionSonando: null,
+                    tiempoActual: '0:01',
+                    duracionTotal: '0:00',
+                    progreso: 0,
+                    intervaloTiempo: null,
+                    
+                    formatearTiempo(segundos) {
+                        if (isNaN(segundos) || segundos === 0) return '0:00';
+                        const min = Math.floor(segundos / 60);
+                        const seg = Math.floor(segundos % 60);
+                        return min + ':' + (seg < 10 ? '0' : '') + seg;
+                    },
+                    
+                    actualizarProgreso() {
+                        const audio = this.$refs.audio;
+                        if (audio && audio.duration) {
+                            this.tiempoActual = this.formatearTiempo(audio.currentTime);
+                            this.duracionTotal = this.formatearTiempo(audio.duration);
+                            this.progreso = (audio.currentTime / audio.duration) * 100;
+                        }
+                    },
+                    
+                    cambiarTiempo(e) {
+                        const audio = this.$refs.audio;
+                        if (audio && audio.duration) {
+                            audio.currentTime = (e.target.value / 100) * audio.duration;
+                        }
+                    },
+                    
+                    cargarCancion(cancion) {
+                        const audio = this.$refs.audio;
+                        if (audio && cancion) {
+                            this.cancionSonando = cancion;
+                            audio.src = cancion.src || cancion.archivo;
+                            audio.load();
+                            audio.play().then(() => {
+                                this.reproduciendo = true;
+                                this.iniciarConteoTiempo();
+                            }).catch(err => console.log('Error de reproducción:', err));
+                        }
+                    },
+
+                    iniciarConteoTiempo() {
+                        if (this.intervaloTiempo) clearInterval(this.intervaloTiempo);
+                        this.intervaloTiempo = setInterval(() => {
+                            if (this.reproduciendo) {
+                                let seg = parseInt(localStorage.getItem('tiempo_reproducido_studiopolis')) || 0;
+                                localStorage.setItem('tiempo_reproducido_studiopolis', seg + 1);
+                            }
+                        }, 1000);
+                    }
+                }"
+                @cambiar-cancion.window="cargarCancion($event.detail)">
+
+            <audio x-ref="audio" 
+                   @timeupdate="actualizarProgreso()"
+                   @loadedmetadata="actualizarProgreso()"
+                   @ended="reproduciendo = false">
+            </audio>
+
+            <div class="flex-1 text-sm text-gray-200 truncate pr-4">
+                <span x-show="cancionSonando" x-text="`Sonando: ${cancionSonando ? cancionSonando.titulo : ''} - ${cancionSonando ? cancionSonando.artista : ''}`"></span>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="text-blue-400 text-xs">🔀</button>
+                <button class="text-white text-sm">⏮</button>
+                <button @click="if ($refs.audio.src) { reproduciendo = !reproduciendo; reproduciendo ? $refs.audio.play() : $refs.audio.pause(); }" 
+                        class="bg-white text-black rounded-full w-9 h-9 flex items-center justify-center font-bold text-base hover:scale-105 transition-transform">
+                    <span x-text="reproduciendo ? '⏸' : '▶'"></span>
+                </button>
+                <button class="text-white text-sm">⏭</button>
+                <button class="text-blue-400 text-xs">🔁</button>
+            </div>
+
+            <div class="flex-1 flex items-center justify-end gap-3 pl-8">
+                <span class="text-xs text-gray-400" x-text="tiempoActual"></span>
+                <input type="range" 
+                       min="0" 
+                       max="100" 
+                       :value="progreso" 
+                       @input="cambiarTiempo($event)" 
+                       class="w-64 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-[#9d72ff]">
+                <span class="text-xs text-gray-400" x-text="duracionTotal"></span>
+            </div>
+        </footer>
     </div>
+
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -42,4 +194,5 @@
         }
     </script>
 </body>
+
 </html>

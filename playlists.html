@@ -5,39 +5,69 @@
     <title>Playlists - TuMusic</title>
     <link rel="stylesheet" href="style.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#9d72ff">
 </head>
-<body class="bg-[#181818] text-white">    <div id="inicio">
-       <aside>
-    <nav>
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="catalogo.html">Catalogo</a></li>
-            <li><a href="playlists.html">Mis Playlists</a></li>
-            <li><a href="favoritos.html">Favoritos</a></li>
-            <li><a href="historial.html">Historial</a></li>
-            <li><a href="estadisticas.html">Estadisticas</a></li>
-        </ul>
-    </nav>
-</aside>
+<body class="bg-[#181818] text-white">
+    <div id="inicio">
+        <aside>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="catalogo.html">Catalogo</a></li>
+                    <li><a href="playlists.html">Mis Playlists</a></li>
+                    <li><a href="favoritos.html">Favoritos</a></li>
+                    <li><a href="historial.html">Historial</a></li>
+                    <li><a href="estadisticas.html">Estadisticas</a></li>
+                </ul>
+            </nav>
+        </aside>
+
         <header>
             <h1>Gestión de Playlists</h1>
         </header>
 
-        <section id="lista" x-data="playlistData">
+        <section id="lista" x-data="{
+            nuevaPlaylist: '',
+            playlists: [],
+            editandoId: null,
+            nombreEdicion: '',
+            guardar() {
+                if (this.nuevaPlaylist.trim() === '') return;
+                this.playlists.push({
+                    id: Date.now(),
+                    nombre: this.nuevaPlaylist.trim()
+                });
+                this.nuevaPlaylist = '';
+            },
+            eliminar(id) {
+                this.playlists = this.playlists.filter(p => p.id !== id);
+            },
+            iniciarEdicion(p) {
+                this.editandoId = p.id;
+                this.nombreEdicion = p.nombre;
+            },
+            guardarEdicion() {
+                if (this.nombreEdicion.trim() === '') return;
+                const p = this.playlists.find(item => item.id === this.editandoId);
+                if (p) p.nombre = this.nombreEdicion.trim();
+                this.editandoId = null;
+                this.nombreEdicion = '';
+            }
+        }">
             <h2>Crear nueva playlist</h2>
-            <input type="text" x-model="nuevaPlaylist" placeholder="Nombre de la playlist">
-            <button @click="guardar()">Guardar</button>
+            <form @submit.prevent="guardar()" style="display: inline-block;">
+                <input type="text" x-model="nuevaPlaylist" placeholder="Nombre de la playlist">
+                <button type="submit">Guardar</button>
+            </form>
 
             <h2 style="margin-top: 20px;">Tus Playlists</h2>
             <ul>
                 <template x-for="p in playlists" :key="p.id">
                     <li style="margin-bottom: 10px;">
                         <span x-show="editandoId !== p.id" x-text="p.nombre" style="margin-right: 10px;"></span>
-                        <button x-show="editandoId !== p.id" @click="iniciarEdicion(p)">Editar</button>
+                        <button x-show="editandoId !== p.id" @click="iniciarEdicion(p)" style="margin-right: 5px;">Editar</button>
                         
                         <span x-show="editandoId === p.id">
                             <input type="text" x-model="nombreEdicion">
@@ -51,11 +81,6 @@
         </section>
     </div>
 
-    <script src="js/repositorios/playlistrepository.js"></script>
-    <script src="js/repositorios/localstorageplaylistrepository.js"></script>
-    <script src="js/servicios/playlistservicio.js"></script>
-    <script src="js/controladores/playlistcontroller.js"></script>
-    <script src="app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {

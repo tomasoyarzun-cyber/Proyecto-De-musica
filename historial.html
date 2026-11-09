@@ -1,37 +1,118 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <title>Studiopolis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial - Studiopolis</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/theme">
+      @theme {
+        --color-marca: #9d72ff;
+      }
+    </style>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#9d72ff">
 </head>
-<body class="bg-[#181818] text-white">  
-      <div id="inicio">
-        <aside>
-    <nav>
-        <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="catalogo.html">Catalogo</a></li>
-            <li><a href="playlists.html">Mis Playlists</a></li>
-            <li><a href="favoritos.html">Favoritos</a></li>
-            <li><a href="historial.html">Historial</a></li>
-            <li><a href="estadisticas.html">Estadisticas</a></li>
-        </ul>
-    </nav>
-</aside>
+
+<body class="bg-[#181818] text-white">
+    <div id="inicio" x-data='{
+        reproduciendo: false,
+        cancionActual: "Lets Groove - Earth, Wind & Fire",
+        historial: [
+            { id: 1, titulo: "Lets Groove", artista: "Earth, Wind & Fire", genero: "Funk/Disco", fecha: "Hoy, 14:30", archivo: "cancion/1.mp3" },
+            { id: 2, titulo: "Lights, Camera, Action", artista: "Tee Lopes", genero: "Jazz/Big Band", fecha: "Ayer, 20:15", archivo: "cancion/2.mp3" },
+            { id: 3, titulo: "Teknopathetic", artista: "Hideki Naganuma", genero: "Electro/Funk", fecha: "Hace 2 días", archivo: "cancion/3.mp3" }
+        ],
+        seleccionarCancion(cancion){
+            this.cancionActual = cancion.titulo + " - " + cancion.artista;
+            this.$refs.audio.src = cancion.archivo;
+            this.$refs.audio.play();
+            this.reproduciendo = true;
+        },
+        vaciarHistorial(){
+            this.historial = [];
+        }
+    }'>
 
         <header>
-            <h1>Musica a todo volumen</h1>
+            <h1>Historial de Reproducción</h1>
         </header>
 
-        <section id="lista">
-            <h2>Historial</h2> 
-            <p>La interfaz está lista, funcionalidades próximamente.</p>
-        </section>
+        <aside>
+            <h2>Studiopolis</h2>
+            <nav aria-label="Menu Principal">
+                <ul class="menu-navegacion">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="catalogo.html">Catálogo</a></li>
+                    <li><a href="playlists.html">Mis Playlists</a></li>
+                    <li><a href="favoritos.html">Favoritos</a></li>
+                    <li><a href="historial.html" class="activo">Historial</a></li>
+                    <li><a href="estadisticas.html">Estadísticas</a></li>
+                    <li><a href="login.html">Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main id="lista">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="m-0">Escuchadas recientemente</h2>
+                <button x-show="historial.length > 0" @click="vaciarHistorial()" class="bg-red-600/80 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-xl text-xs transition-all cursor-pointer">
+                    Borrar historial
+                </button>
+            </div>
+
+            <template x-if="historial.length === 0">
+                <p class="text-gray-400 mt-4">No tienes reproducciones registradas en el historial.</p>
+            </template>
+
+            <div class="conjunto-catalogo">
+                <template x-for="cancion in historial" :key="cancion.id">
+                    <article class="ficha-cancion">
+                        <h3 x-text="cancion.titulo"></h3>
+                        <p><strong>Artista:</strong> <span x-text="cancion.artista"></span></p>
+                        <p><strong>Escuchada:</strong> <span class="text-gray-400 text-sm" x-text="cancion.fecha"></span></p>
+
+                        <div class="acciones-ficha">
+                            <button type="button" class="boton-escuchar" @click="seleccionarCancion(cancion)">
+                                Volver a escuchar
+                            </button>
+                        </div>
+                    </article>
+                </template>
+            </div>
+        </main>
+
+        <footer id="reproductor">
+            <audio id="audio-reproductor" x-ref="audio" src="cancion/1.mp3"></audio>
+            <div class="controles">
+                <p class="cancion-activa" x-text="'Sonando: ' + cancionActual"></p>
+
+                <div class="botonera-musica">
+                    <button class="boton-accion" aria-label="Aleatorio">🔀</button>
+                    <button class="boton-accion" aria-label="Anterior">⏮</button>
+
+                    <button class="boton-accion boton-reproducir-pausar"
+                        aria-label="Reproducir o Pausar"
+                        @click="reproduciendo = !reproduciendo; reproduciendo ? $refs.audio.play() : $refs.audio.pause()">
+                        <span x-text="reproduciendo ? '⏸' : '▶'"></span>
+                    </button>
+
+                    <button class="boton-accion" aria-label="Siguiente">⏭</button>
+                    <button class="boton-accion" aria-label="Repetir">🔁</button>
+                </div>
+
+                <div class="progreso">
+                    <span class="marca-tiempo tiempo-actual">0:01</span>
+                    <input type="range" class="barra-deslizante" min="0" max="100" value="1" aria-label="Progreso de la canción">
+                    <span class="marca-tiempo tiempo-total">3:08</span>
+                </div>
+            </div>
+        </footer>
     </div>
+
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
